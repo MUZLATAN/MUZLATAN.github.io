@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>HyperIQA 图像质量评估 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="图像质量评估中的HyperIQA神经网络模型HyperIQA:论文地址论文源代码：github这篇文章是针对于目前BIQA任务中，大多数方法是预测合成失真图片的，对真实场景下的失真问题很少，因此这篇文章的motivation是解决真实场景下的IQA问题。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HyperIQA 图像质量评估">
+<meta property="og:url" content="http://example.com/2024/12/08/HyperIQA%20%E5%9B%BE%E5%83%8F%E8%B4%A8%E9%87%8F%E8%AF%84%E4%BC%B0/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="图像质量评估中的HyperIQA神经网络模型HyperIQA:论文地址论文源代码：github这篇文章是针对于目前BIQA任务中，大多数方法是预测合成失真图片的，对真实场景下的失真问题很少，因此这篇文章的motivation是解决真实场景下的IQA问题。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/static/img/705c035620c79680db568cb806b82b23.v2-5a9387fa8e7a7e593d9865d63e53d8a0_720w.webp">
+<meta property="article:published_time" content="2024-12-08T13:56:31.637Z">
+<meta property="article:modified_time" content="2024-12-04T03:28:08.469Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="blog">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/static/img/705c035620c79680db568cb806b82b23.v2-5a9387fa8e7a7e593d9865d63e53d8a0_720w.webp">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/atom.xml" title="RSS Feed"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="Search"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-HyperIQA 图像质量评估" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2024/12/08/HyperIQA%20%E5%9B%BE%E5%83%8F%E8%B4%A8%E9%87%8F%E8%AF%84%E4%BC%B0/" class="article-date">
+  <time class="dt-published" datetime="2024-12-08T13:56:31.637Z" itemprop="datePublished">2024-12-08</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/CNN/">CNN</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      HyperIQA 图像质量评估
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="图像质量评估中的HyperIQA神经网络模型"><a href="#图像质量评估中的HyperIQA神经网络模型" class="headerlink" title="图像质量评估中的HyperIQA神经网络模型"></a>图像质量评估中的HyperIQA神经网络模型</h1><p>HyperIQA:<a target="_blank" rel="noopener" href="https://openaccess.thecvf.com/content_CVPR_2020/html/Su_Blindly_Assess_Image_Quality_in_the_Wild_Guided_by_a_CVPR_2020_paper.html">论文地址</a><br>论文源代码：<a target="_blank" rel="noopener" href="https://github.com/SSL92/hyperIQA">github</a><br>这篇文章是针对于目前BIQA任务中，大多数方法是预测合成失真图片的，对真实场景下的失真问题很少，因此这篇文章的motivation是解决真实场景下的IQA问题。</p>
+<span id="more"></span>
+<p>对于真实场景下的IQA任务有三个难点:</p>
+<ul>
+<li>真实场景下没有参考图，没有可利用的参考信息，这也是BIQA中最困难的一点。</li>
+<li>不同于合成的失真在整个图片范围内进行添加失真，真实场景下的图片包含了更复杂的失真类型。被捕捉的图片不仅包含均匀失真（脱焦，低光照），也包含非均匀失真（过度照明，运动模糊，重像）。因此，算法很难去捕捉全局与局部的失真并将它们合并起来预测得到一个好的分数。</li>
+<li>相比于合成的失真图，例如LIVE，TOD2013，CSIQ仅包含不超过30张的参考图，这些数据集中包含的内容信息非常少。而对于真实场景下的数据集例如Live-Challenge和Koniq10k，包含1169和10073张图片，它们的内容信息量非常丰富，巨大的内容差异对于IQA方法的泛化性是一个巨大的挑战。</li>
+</ul>
+<p>对于失真类型的不同与内容的不同，对于真实图片的IQA还有很多问题没有被解决。如图1所示，随着图片的不同，提取到的特征也不同。  </p>
+<p><img src="/static/img/705c035620c79680db568cb806b82b23.v2-5a9387fa8e7a7e593d9865d63e53d8a0_720w.webp" alt="v2-5a9387fa8e7a7e593d9865d63e53d8a0_720w.webp"><br>这也导致了预测图像质量的非一致性。在之前的工作中，无论是人工提取的feature还是使用浅层网络架构都不能解决合成IQA任务的同时处理真实场景下的扭曲。这也意味着low level features并不能足够强地表征真实场景下的复杂失真。因此，有很多尝试去利用深度语义特征作为质量的描述：<strong>深度模型在分类任务上进行预训练后被用来预测真实场景下的失真</strong>。这个假设背后的依据是真实失真是存在于分类任务的数据集中例如ImageNet，这些预训练好的特征已经具备了一些<em>quality aware</em>。</p>
+<p>尽管这些尝试取得了一些提升，但是更多的研究仍然欠缺。对于采用网络架构针对于IQA任务识别物体的方式仍有两个缺陷。<br>现在的深度学习模型只能针对分类任务学习全局特征。但是真实的失真分布不规律，大部分是集中于某个局部区域。忽略掉局部模式会导致预测的质量与人眼的感官非一致性。因为人类视觉系统（HVS）对于局部失真更加敏感，当图片的其它区域质量较好时。<br>对于图片内容的不同，人类对物体的质量感知也会不同。对于一张蓝色的天空，人眼会认为是高质量的，但是IQA method会认为是一个模糊的图片由于图片包含了大量平坦区域。因此，在识别物体内容前去预测图片质量并不符合人类理解这个世界的规律。在HVS中，自上而下的感知模型，意味着人类在注意其余子任务例如质量评价前尝试去理解图片。然而对于当前的模型，融合IQA任务进语义识别网络中，使得网络同时识别图片内容与质量，让模型在识别图片内容后评价图片质量是更合适的。<br>在这篇文章中主要是发展真实IQA方法，考虑到出现在真实世界中的两大挑战。失真多样性与内容多样性。作者提出了local distortion aware模块去从多尺度提取局部特征，以此来解决失真多样性。作者引入了<strong>Hyper Network</strong>结构能动态的生成权重，为了质量预测网络去覆盖广泛的内容多样性。总得来说，本篇文章的贡献主要有以下三点：</p>
+<ul>
+<li>作者提出了一种新型的IQA模型，能自适应图像质量预测。</li>
+<li>作者引入了local distortion aware模块去捕捉图像质量。作者融合了局部失真特征与全局语义特征去聚合细粒度细节与全局信息，图像质量是在多尺度表征时被预测。</li>
+<li>实验证明了作者的方法在真实场景的IQA数据集和合成失真数据集都很有竞争力。并且也验证了该方法具有很强的泛化性。</li>
+</ul>
+<p>基于作者开源的代码， 笔者基于其完成了基于ffmpeg 的HperIQA的视频评估切割工作， 如下<br>项目源码：<a target="_blank" rel="noopener" href="https://github.com/MUZLATAN/FFmpegHyperIQA">Github</a></p>
+<h1 id="Requirement"><a href="#Requirement" class="headerlink" title="Requirement"></a>Requirement</h1> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Python==3.10</span><br><span class="line">PyTorch</span><br><span class="line">TorchVision</span><br><span class="line">scipy</span><br></pre></td></tr></table></figure>
+<p>另外需要安装ffmpeg </p>
+<h1 id="数据和模型"><a href="#数据和模型" class="headerlink" title="数据和模型"></a>数据和模型</h1><p><a target="_blank" rel="noopener" href="https://drive.usercontent.google.com/download?id=1OOUmnbvpGea0LIGpIWEbOyxfWx6UCiiE&export=download&authuser=0">模型地址</a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># pretrained model</span></span><br><span class="line">./pretrained/koniq_pretrained.pkl</span><br><span class="line"></span><br><span class="line"><span class="comment"># input data</span></span><br><span class="line">./data</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="视频分割输出地址"><a href="#视频分割输出地址" class="headerlink" title="视频分割输出地址"></a>视频分割输出地址</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">output_video/</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="快速运行"><a href="#快速运行" class="headerlink" title="快速运行"></a>快速运行</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python main.py </span><br></pre></td></tr></table></figure>
+
+<!-- more -->
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2024/12/08/HyperIQA%20%E5%9B%BE%E5%83%8F%E8%B4%A8%E9%87%8F%E8%AF%84%E4%BC%B0/" data-id="cm4fo4iqw00007stwhsxu5kyg" data-title="HyperIQA 图像质量评估" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/blog/" rel="tag">blog</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2024/12/08/%E5%B0%86%20Lua%20%E4%B8%8E%20C%20%E9%9B%86%E6%88%90%EF%BC%9A%E7%AC%AC%206%20%E9%83%A8%E5%88%86/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          将 Lua 与 C 集成：第 6 部分
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2024/12/08/UE%E8%93%9D%E5%9B%BE%EF%BC%9A%20%E7%AC%AC1%E9%83%A8%E5%88%86/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">UE蓝图： 第1部分</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/CNN/">CNN</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lua-C/">lua && C++</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%93%9D%E5%9B%BE/">蓝图</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/" rel="tag">blog</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/blog/" style="font-size: 10px;">blog</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/12/">December 2024</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2024/12/08/UE%E8%93%9D%E5%9B%BE%EF%BC%9AUE%E7%AE%80%E5%8D%95%E5%8A%A8%E7%94%BB%E5%85%A5%E9%97%A8/">UE蓝图：UE简单动画入门</a>
+          </li>
+        
+          <li>
+            <a href="/2024/12/08/UE%E8%93%9D%E5%9B%BE%EF%BC%9A%E4%BB%BF%E7%85%A7UE%20%E8%93%9D%E5%9B%BE%E5%BC%80%E5%8F%91%E7%9A%84%E7%AE%80%E6%98%93%E8%93%9D%E5%9B%BE%E7%B3%BB%E7%BB%9F/">UE蓝图：仿照UE 蓝图开发的简易蓝图系统</a>
+          </li>
+        
+          <li>
+            <a href="/2024/12/08/%E5%B0%86%20Lua%20%E4%B8%8E%20C%20%E9%9B%86%E6%88%90%EF%BC%9A%E7%AC%AC%201%20%E9%83%A8%E5%88%86/">将 Lua 与 C 集成：第 1 部分</a>
+          </li>
+        
+          <li>
+            <a href="/2024/12/08/%E5%B0%86%20Lua%20%E4%B8%8E%20C%20%E9%9B%86%E6%88%90%EF%BC%9A%E7%AC%AC%202%20%E9%83%A8%E5%88%86/">将 Lua 与 C 集成：第 2 部分</a>
+          </li>
+        
+          <li>
+            <a href="/2024/12/08/%E5%B0%86%20Lua%20%E4%B8%8E%20C%20%E9%9B%86%E6%88%90%EF%BC%9A%E7%AC%AC%204%20%E9%83%A8%E5%88%86/">将 Lua 与 C 集成：第 4 部分</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2024 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

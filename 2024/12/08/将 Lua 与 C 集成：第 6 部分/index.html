@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>将 Lua 与 C 集成：第 6 部分 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="将 Lua 与 C 集成：第 6 部分要将 Lua 代码加载到 Lua 状态，您很可能会使用 Lua 辅助库中的luaL_loadfile()orluaL_loadstring() 函数从文件或字符串中加载它。 然而，Lua 本身使用不同的方法来加载 Lua 代码：它重复调用一个函数来逐段返回代码。此函数称为 Lua 读取器，它可以返回下一段代码及其大小（以字节为单位），也可以发出 Lua 代码已">
+<meta property="og:type" content="article">
+<meta property="og:title" content="将 Lua 与 C 集成：第 6 部分">
+<meta property="og:url" content="http://example.com/2024/12/08/%E5%B0%86%20Lua%20%E4%B8%8E%20C%20%E9%9B%86%E6%88%90%EF%BC%9A%E7%AC%AC%206%20%E9%83%A8%E5%88%86/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="将 Lua 与 C 集成：第 6 部分要将 Lua 代码加载到 Lua 状态，您很可能会使用 Lua 辅助库中的luaL_loadfile()orluaL_loadstring() 函数从文件或字符串中加载它。 然而，Lua 本身使用不同的方法来加载 Lua 代码：它重复调用一个函数来逐段返回代码。此函数称为 Lua 读取器，它可以返回下一段代码及其大小（以字节为单位），也可以发出 Lua 代码已">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-12-08T13:56:31.654Z">
+<meta property="article:modified_time" content="2024-12-04T03:28:08.393Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="blog">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/atom.xml" title="RSS Feed"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="Search"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-将 Lua 与 C 集成：第 6 部分" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2024/12/08/%E5%B0%86%20Lua%20%E4%B8%8E%20C%20%E9%9B%86%E6%88%90%EF%BC%9A%E7%AC%AC%206%20%E9%83%A8%E5%88%86/" class="article-date">
+  <time class="dt-published" datetime="2024-12-08T13:56:31.654Z" itemprop="datePublished">2024-12-08</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/lua-C/">lua && C++</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      将 Lua 与 C 集成：第 6 部分
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="将-Lua-与-C-集成：第-6-部分"><a href="#将-Lua-与-C-集成：第-6-部分" class="headerlink" title="将 Lua 与 C 集成：第 6 部分"></a>将 Lua 与 C 集成：第 6 部分</h1><p>要将 Lua 代码加载到 Lua 状态，您很可能会使用 Lua 辅助库中的<code>luaL_loadfile()</code>or<code>luaL_loadstring() </code>函数从文件或字符串中加载它。</p>
+<p>然而，Lua 本身使用不同的方法来加载 Lua 代码：它重复调用一个函数来逐段返回代码。此函数称为 Lua 读取器，它可以返回下一段代码及其大小（以字节为单位），也可以发出 Lua 代码已到达末尾的信号。</p>
+<p>因此，为了仅使用核心库中的函数加载 Lua 代码，您可以使用lua_load()函数，并为其提供 Lua 阅读器</p>
+<span id="more"></span>
+
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">lua_load</span><span class="params">(lua_State *L,</span></span></span><br><span class="line"><span class="params"><span class="function">        lua_Reader reader, </span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="type">void</span> *data, </span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="type">const</span> <span class="type">char</span> *chunkname,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="type">const</span> <span class="type">char</span> *mode)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>reader 是将重复调用的函数。<br>每次调用时，data指针将传递给读取器函数。Lua 本身不会使用它。</p>
+<p>请注意，lua_load()只加载 Lua 代码，但不运行它。lua_load()成功返回（使用返回代码LUA_OK）后，加载的 Lua 代码将位于堆栈的顶部。</p>
+<p>但是 Lua 读取器函数是什么样子的，它是如何调用的呢？该函数将下一段 Lua 代码作为<em>const char</em> *指针返回，并获取 Lua 状态、数据指针和指向 size_t 作为 参数的指针：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">const</span> <span class="type">char</span> *</span></span><br><span class="line"><span class="function"><span class="title">myReader</span><span class="params">(lua_State *L, <span class="type">void</span> *data, <span class="type">size_t</span> size)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">        <span class="comment">/* Return a piece of Lua source and put its size in size */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当不再返回 Lua 代码时，读取器函数将返回 NULL 或设置size为零。</p>
+<p>在 Lua 辅助库中找到的用于加载 Lua 代码的函数实际上不出所料地被实现为 Lua 阅读器。</p>
+<p>Lua load 允许我们提供一个函数，从任何来源返回 Lua 代码，例如网络连接、HTTP 请求、存储在数据库中的对象，甚至是通过解析不同代码格式而动态构建的合成 Lua 代码。</p>
+<p>:::info{title&#x3D;”Lua 模板使用 Lua 阅读器来处理源模板”}</p>
+<p>Lua 模板引擎用于将任何源语言与 Lua 表达式和 Lua 代码混合在一起，它使用 Lua 阅读器来解析源文件并将其转换为 Lua 代码。仅当为第一个 fime 呈现模板时，才会发生这种情况。代码将被编译为字节码，在后续调用同一模板时，Lua 代码将直接执行，而无需再次解析或编译。reader 函数生成的 Lua 代码将输出模板内容，同时运行原始模板中存在的 Lua 代码片段。<br>:::</p>
+<h2 id="从-zip-文件中读取-Lua-代码"><a href="#从-zip-文件中读取-Lua-代码" class="headerlink" title="从 .zip 文件中读取 Lua 代码"></a>从 .zip 文件中读取 Lua 代码</h2><p>作为工作 Lua 阅读器的一个示例，我们假设我们想要从存储在 .zip 文件中的文件加载 Lua 代码，而无需先在命令行上解压缩 .zip 文件。</p>
+<p>假设我们有一个testzip.zip文件，其中包含一个包含要加载的testzip.lua代码的条目</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">% </span><span class="language-bash">zip -sf testzip.zip</span></span><br><span class="line">Archive contains:</span><br><span class="line">  testzip.lua</span><br><span class="line">Total 1 entries (1468 bytes)</span><br><span class="line"><span class="meta prompt_">%</span></span><br></pre></td></tr></table></figure>
+
+<p>我们首先定义我们想要的帮助函数的样子，即我们调用的函数来从 .zip 文件加载 Lua。这意味着，我们设计了一个类似于luaL_loadfile() 和 luaL_loadstring()的函数。</p>
+<p>一种方法是将 .zip 文件的路径和 .zip 文件中包含的 Lua 文件的路径传递给函数：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">lua_loadzip</span><span class="params">(lua_State *L, <span class="type">const</span> <span class="type">char</span> *zipfile, <span class="type">const</span> <span class="type">char</span> *path)</span></span></span><br></pre></td></tr></table></figure>
+<p>在我们看lua_loadzip() 的实现之前，让我们编写一个小的命令行工具，它托管 Lua 环境，加载和调用包含在 .zip 文件中的 Lua 代码。我们调用ziplua该实用程序，它使用两个参数调用，.zip 文件的路径和 Lua 代码的路径。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">% </span><span class="language-bash">./ziplua</span></span><br><span class="line">usage: ziplua &lt;zipfile&gt; &lt;path&gt;</span><br><span class="line"><span class="meta prompt_">% </span><span class="language-bash">./ziplua testzip.zip testzip.lua <span class="comment"># Load and run testzip.lua</span></span></span><br><span class="line"><span class="meta prompt_">%</span></span><br></pre></td></tr></table></figure>
+<p>这是 ziplua 实用程序的源代码：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;err.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;lua.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;lualib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;lauxlib.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">extern</span> <span class="type">int</span> <span class="title">lua_loadzip</span><span class="params">(lua_State *, <span class="type">const</span> <span class="type">char</span> *, <span class="type">const</span> <span class="type">char</span> *)</span></span>;</span><br><span class="line"><span class="function"><span class="type">int</span></span></span><br><span class="line"><span class="function"><span class="title">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">        lua_State *L;</span><br><span class="line">        <span class="keyword">if</span> (argc != <span class="number">3</span>) &#123;</span><br><span class="line">                <span class="built_in">fprintf</span>(stderr, <span class="string">&quot;usage: ziplua &lt;zipfile&gt; &lt;path&gt;\n&quot;</span>);</span><br><span class="line">                <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        L = <span class="built_in">luaL_newstate</span>();</span><br><span class="line">        <span class="keyword">if</span> (L == <span class="literal">NULL</span>) &#123;</span><br><span class="line">                <span class="built_in">fprintf</span>(stderr, <span class="string">&quot;memory error\n&quot;</span>);</span><br><span class="line">                <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">luaL_openlibs</span>(L);</span><br><span class="line">        <span class="keyword">switch</span> (<span class="built_in">lua_loadzip</span>(L, argv[<span class="number">1</span>], argv[<span class="number">2</span>])) &#123;</span><br><span class="line">        <span class="keyword">case</span> LUA_ERRSYNTAX:</span><br><span class="line">                <span class="built_in">fprintf</span>(stderr, <span class="string">&quot;syntax error: %s\n&quot;</span>, <span class="built_in">lua_tostring</span>(L, <span class="number">-1</span>));</span><br><span class="line">                <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">        <span class="keyword">case</span> LUA_ERRMEM:</span><br><span class="line">                <span class="built_in">fprintf</span>(stderr, <span class="string">&quot;memory error\n&quot;</span>);</span><br><span class="line">                <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">        <span class="keyword">case</span> LUA_ERRFILE:</span><br><span class="line">                <span class="built_in">fprintf</span>(stderr, <span class="string">&quot;error: %s\n&quot;</span>, <span class="built_in">lua_tostring</span>(L, <span class="number">-1</span>));</span><br><span class="line">                <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">        <span class="keyword">case</span> LUA_OK:</span><br><span class="line">                ;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">switch</span> (<span class="built_in">lua_pcall</span>(L, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>)) &#123;</span><br><span class="line">        <span class="keyword">case</span> LUA_ERRRUN:</span><br><span class="line">                <span class="built_in">fprintf</span>(stderr, <span class="string">&quot;runtime error: %s\n&quot;</span>,</span><br><span class="line">                        <span class="built_in">lua_tostring</span>(L, <span class="number">-1</span>));</span><br><span class="line">                <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">        <span class="keyword">case</span> LUA_ERRMEM:</span><br><span class="line">                <span class="built_in">fprintf</span>(stderr, <span class="string">&quot;memory allocation error: %s\n&quot;</span>,</span><br><span class="line">                        <span class="built_in">lua_tostring</span>(L, <span class="number">-1</span>));</span><br><span class="line">                <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">        <span class="keyword">case</span> LUA_ERRERR:</span><br><span class="line">                <span class="built_in">fprintf</span>(stderr, <span class="string">&quot;error running message handler: %s\n&quot;</span>,</span><br><span class="line">                        <span class="built_in">lua_tostring</span>(L, <span class="number">-1</span>));</span><br><span class="line">                <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">        <span class="keyword">case</span> LUA_OK:</span><br><span class="line">                ;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">lua_close</span>(L);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>有了这些，可以开发相应的 Lua 阅读器和lua_loadzip()函数。对于.zip文件的实际处理，我们将依赖 <a target="_blank" rel="noopener" href="https://libzip.org/">https://libzip.org</a> 的 libzip 库。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdlib.h&gt;</span><br><span class="line">#include &lt;lua.h&gt;</span><br><span class="line">#include &lt;lualib.h&gt;</span><br><span class="line">#include &lt;lauxlib.h&gt;</span><br><span class="line">#include &lt;zip.h&gt;</span><br></pre></td></tr></table></figure>
+<p>我们将需要一些实际读取器函数的状态信息，这些信息将在data * 指针中传递。在我们的例子中，我们需要一个指向我们从中读取的 zip 文件的指针，以及我们仍然需要读取的剩余大小。我们定义一个zip_reader_stat_t类型来保存此信息。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">typedef struct &#123;</span><br><span class="line">        zip_file_t        *zf; </span><br><span class="line">        size_t                size;</span><br><span class="line">&#125; zip_reader_stat_t;</span><br></pre></td></tr></table></figure>
+<p>zip_file_t是由 Zip.h 中的 libzip 定义的数据类型。</p>
+<p>在我们的lua_loadzip()函数中，我们初始化一个zip_reader_stat_t变量，并将其与我们的 reader 函数一起传递给loa_load()</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">zip_reader_stat_t</span> st;</span><br><span class="line">st.zf = <span class="built_in">zip_fopen</span>(zip, path, <span class="number">0</span>); </span><br><span class="line">st.size = sb.size;</span><br><span class="line">error = <span class="built_in">lua_load</span>(L, zip_Reader, &amp;st, path, <span class="literal">NULL</span>);</span><br></pre></td></tr></table></figure>
+<p>path 包含 .zip 文件中 Lua 文件的路径。</p>
+<p>lua_load()现在将调zip_Reader()函数，该函数将尝试从 .zip 文件中读取最多 st.size字节并将它们返回给lua_load() 。由于读取返回的字节数可能少于请求的字节数，因此它还将返回实际读取的字节数st.size并按该数字递减。一旦st.size为零，该函数将返回 NULL，从而终止加载过程。</p>
+<p>带有zip_Reader()函数的完整函数现在如下所示：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;lua.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;lualib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;lauxlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;zip.h&gt;</span></span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> &#123;</span><br><span class="line">        <span class="type">zip_file_t</span>        *zf;</span><br><span class="line">        <span class="type">size_t</span>                 size;</span><br><span class="line">&#125; <span class="type">zip_reader_stat_t</span>;</span><br><span class="line"><span class="function"><span class="type">static</span> <span class="type">const</span> <span class="type">char</span> *</span></span><br><span class="line"><span class="function"><span class="title">zip_Reader</span><span class="params">(lua_State *L, <span class="type">void</span> *data, <span class="type">size_t</span> *size)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">        <span class="type">zip_reader_stat_t</span> *st = (<span class="type">zip_reader_stat_t</span> *)data;</span><br><span class="line">        <span class="type">static</span> <span class="type">char</span> *buf = <span class="literal">NULL</span>;</span><br><span class="line">        <span class="built_in">free</span>(buf);</span><br><span class="line">        <span class="keyword">if</span> (st-&gt;size == <span class="number">0</span>)</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">        buf = <span class="built_in">malloc</span>(st-&gt;size);</span><br><span class="line">        *size = <span class="built_in">zip_fread</span>(st-&gt;zf, buf, st-&gt;size);</span><br><span class="line">        st-&gt;size -= *size;</span><br><span class="line">        <span class="keyword">return</span> buf;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span></span></span><br><span class="line"><span class="function"><span class="title">lua_loadzip</span><span class="params">(lua_State *L, <span class="type">const</span> <span class="type">char</span> *zipfile, <span class="type">const</span> <span class="type">char</span> *path)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">        <span class="type">zip_t</span> *zip;</span><br><span class="line">        <span class="type">zip_stat_t</span> sb;</span><br><span class="line">        <span class="type">zip_reader_stat_t</span> st;</span><br><span class="line">        <span class="type">int</span> error;</span><br><span class="line">        zip = <span class="built_in">zip_open</span>(zipfile, ZIP_RDONLY, &amp;error);</span><br><span class="line">        <span class="keyword">if</span> (zip == <span class="literal">NULL</span>) &#123;</span><br><span class="line">                <span class="keyword">switch</span> (error) &#123;</span><br><span class="line">                <span class="keyword">case</span> ZIP_ER_INVAL:</span><br><span class="line">                        <span class="built_in">lua_pushstring</span>(L, <span class="string">&quot;invalid path&quot;</span>);</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">case</span> ZIP_ER_MEMORY:</span><br><span class="line">                        <span class="built_in">lua_pushstring</span>(L, <span class="string">&quot;memory error&quot;</span>);</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">case</span> ZIP_ER_NOENT:</span><br><span class="line">                        <span class="built_in">lua_pushstring</span>(L, <span class="string">&quot;file not found&quot;</span>);</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">case</span> ZIP_ER_NOZIP:</span><br><span class="line">                        <span class="built_in">lua_pushstring</span>(L, <span class="string">&quot;not a zip file&quot;</span>);</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">case</span> ZIP_ER_OPEN:</span><br><span class="line">                        <span class="built_in">lua_pushstring</span>(L, <span class="string">&quot;file open error&quot;</span>);</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">case</span> ZIP_ER_READ:</span><br><span class="line">                        <span class="built_in">lua_pushstring</span>(L, <span class="string">&quot;read error&quot;</span>);</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">default</span>:</span><br><span class="line">                        <span class="built_in">lua_pushstring</span>(L, <span class="string">&quot;unknown zipfile related error&quot;</span>);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">return</span> LUA_ERRFILE;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">zip_stat</span>(zip, path, <span class="number">0</span>, &amp;sb)) &#123;</span><br><span class="line">                <span class="built_in">lua_pushstring</span>(L, <span class="string">&quot;can&#x27;t stat zipfile entry&quot;</span>);</span><br><span class="line">                <span class="built_in">zip_close</span>(zip);</span><br><span class="line">                <span class="keyword">return</span> LUA_ERRFILE;</span><br><span class="line">        &#125;</span><br><span class="line">        st.zf = <span class="built_in">zip_fopen</span>(zip, path, <span class="number">0</span>);</span><br><span class="line">        st.size = sb.size;</span><br><span class="line">        error = <span class="built_in">lua_load</span>(L, zip_Reader, &amp;st, path, <span class="literal">NULL</span>);</span><br><span class="line">        <span class="built_in">zip_fclose</span>(st.zf);</span><br><span class="line">        <span class="built_in">zip_close</span>(zip);</span><br><span class="line">        <span class="keyword">return</span> error;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2024/12/08/%E5%B0%86%20Lua%20%E4%B8%8E%20C%20%E9%9B%86%E6%88%90%EF%BC%9A%E7%AC%AC%206%20%E9%83%A8%E5%88%86/" data-id="cm4fo4ira00147stw250oac07" data-title="将 Lua 与 C 集成：第 6 部分" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/blog/" rel="tag">blog</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2024/12/08/%E5%B0%86%20Lua%20%E4%B8%8E%20C%20%E9%9B%86%E6%88%90%EF%BC%9A%E7%AC%AC%205%20%E9%83%A8%E5%88%86/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          将 Lua 与 C 集成：第 5 部分
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2024/12/08/HyperIQA%20%E5%9B%BE%E5%83%8F%E8%B4%A8%E9%87%8F%E8%AF%84%E4%BC%B0/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">HyperIQA 图像质量评估</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/CNN/">CNN</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lua-C/">lua && C++</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%93%9D%E5%9B%BE/">蓝图</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/" rel="tag">blog</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/blog/" style="font-size: 10px;">blog</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/12/">December 2024</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2024/12/08/UE%E8%93%9D%E5%9B%BE%EF%BC%9AUE%E7%AE%80%E5%8D%95%E5%8A%A8%E7%94%BB%E5%85%A5%E9%97%A8/">UE蓝图：UE简单动画入门</a>
+          </li>
+        
+          <li>
+            <a href="/2024/12/08/UE%E8%93%9D%E5%9B%BE%EF%BC%9A%E4%BB%BF%E7%85%A7UE%20%E8%93%9D%E5%9B%BE%E5%BC%80%E5%8F%91%E7%9A%84%E7%AE%80%E6%98%93%E8%93%9D%E5%9B%BE%E7%B3%BB%E7%BB%9F/">UE蓝图：仿照UE 蓝图开发的简易蓝图系统</a>
+          </li>
+        
+          <li>
+            <a href="/2024/12/08/%E5%B0%86%20Lua%20%E4%B8%8E%20C%20%E9%9B%86%E6%88%90%EF%BC%9A%E7%AC%AC%201%20%E9%83%A8%E5%88%86/">将 Lua 与 C 集成：第 1 部分</a>
+          </li>
+        
+          <li>
+            <a href="/2024/12/08/%E5%B0%86%20Lua%20%E4%B8%8E%20C%20%E9%9B%86%E6%88%90%EF%BC%9A%E7%AC%AC%202%20%E9%83%A8%E5%88%86/">将 Lua 与 C 集成：第 2 部分</a>
+          </li>
+        
+          <li>
+            <a href="/2024/12/08/%E5%B0%86%20Lua%20%E4%B8%8E%20C%20%E9%9B%86%E6%88%90%EF%BC%9A%E7%AC%AC%204%20%E9%83%A8%E5%88%86/">将 Lua 与 C 集成：第 4 部分</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2024 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

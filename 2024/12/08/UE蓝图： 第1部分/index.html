@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>UE蓝图： 第1部分 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="重要的蓝图类型UE里面的 蓝图可视化脚本 系统是一类完整的游戏性脚本系统，此系统的基础概念是使用基于节点的界面在虚幻编辑器中创建游戏性元素。与诸多常用脚本语言相同，作用于UE中的面向对象的类或对象蓝图有很多种，先学一下关卡蓝图, 蓝图类, 动画蓝图(ABP ) ,  事件图表（EventGraph）">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UE蓝图： 第1部分">
+<meta property="og:url" content="http://example.com/2024/12/08/UE%E8%93%9D%E5%9B%BE%EF%BC%9A%20%E7%AC%AC1%E9%83%A8%E5%88%86/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="重要的蓝图类型UE里面的 蓝图可视化脚本 系统是一类完整的游戏性脚本系统，此系统的基础概念是使用基于节点的界面在虚幻编辑器中创建游戏性元素。与诸多常用脚本语言相同，作用于UE中的面向对象的类或对象蓝图有很多种，先学一下关卡蓝图, 蓝图类, 动画蓝图(ABP ) ,  事件图表（EventGraph）">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/static/img/3f0c2e49296ba585deef05a9ea5aefaf.Pasted%20image%2020240611185727.webp">
+<meta property="og:image" content="http://example.com/static/img/c1478f1e08fa00d7d850ce585e21f29d.Pasted%20image%2020240611191427.webp">
+<meta property="og:image" content="http://example.com/static/img/dabccccde333878260ed628ca6e7f4ac.Pasted%20image%2020240612102528.webp">
+<meta property="article:published_time" content="2024-12-08T13:56:31.637Z">
+<meta property="article:modified_time" content="2024-12-04T03:28:08.378Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="blog">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/static/img/3f0c2e49296ba585deef05a9ea5aefaf.Pasted%20image%2020240611185727.webp">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/atom.xml" title="RSS Feed"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="Search"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-UE蓝图： 第1部分" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2024/12/08/UE%E8%93%9D%E5%9B%BE%EF%BC%9A%20%E7%AC%AC1%E9%83%A8%E5%88%86/" class="article-date">
+  <time class="dt-published" datetime="2024-12-08T13:56:31.637Z" itemprop="datePublished">2024-12-08</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E8%93%9D%E5%9B%BE/">蓝图</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      UE蓝图： 第1部分
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="重要的蓝图类型"><a href="#重要的蓝图类型" class="headerlink" title="重要的蓝图类型"></a>重要的蓝图类型</h2><p>UE里面的 <strong>蓝图可视化脚本</strong> 系统是一类完整的游戏性脚本系统，此系统的基础概念是使用基于节点的界面在虚幻编辑器中创建游戏性元素。与诸多常用脚本语言相同，作用于UE中的面向对象的类或对象<br>蓝图有很多种，先学一下关卡蓝图, 蓝图类, 动画蓝图(ABP ) ,  <strong>事件图表（EventGraph）</strong></p>
+<span id="more"></span>
+
+<ul>
+<li><strong>关卡蓝图（Level Blueprint）：</strong> 是一种标准蓝图类型的 <strong>蓝图（Blueprint）</strong> ，用作关卡范围的全局事件图。 默认情况下，项目中的每个关卡都有对应的的关卡蓝图，可在UE Editor中编辑这些关卡蓝图， 但是不能通过编辑器接口创建新的关卡蓝图。<ul>
+<li>关卡蓝图主要用于实现和管理关卡中特定的事件、交互和逻辑。它通常用于控制关卡的启动、结束、触发器事件、关卡内的动画和场景变化等。</li>
+<li>每个关卡都有一个唯一的关卡蓝图，它包含与该关卡相关的所有事件和逻辑。关卡蓝图与该关卡紧密绑定，无法在其他关卡中重用。</li>
+</ul>
+</li>
+<li><strong>蓝图类（Blueprint Class）:</strong> , 一般缩写为 <strong>Blueprint(蓝图)</strong> ,是一种允许我们轻松地基于现有游戏性类添加功能的<strong>资源</strong>。 <em>蓝图</em> 是在虚幻编辑器中可视化地创建的，不需要书写代码，会被作为<strong>类</strong>保存在内容包中。 实际上，这些类蓝图定义了一种新类别或类型的Actor，这些Actor可以作为实例放置到地图中， 就和其他类型的Actor的行为一样。</li>
+<li><strong>事件图表（EventGraph）:</strong> 包含一个节点图；节点图使用事件和函数调用来执行操作，从而响应与该蓝图有关的游戏事件。<strong>它添加的功能会对该蓝图的所有实例产生影响</strong>。你可以在这里设置交互功能和动态响应。例如，光源蓝图可以通过关闭其 <code>LightComponent</code> 和更改其网格体使用的材质，来响应伤害事件。光源蓝图的所有实例会自动具备这个功能。</li>
+<li><strong>动画蓝图（Animation Blueprint）：</strong> 在动画蓝图编辑器(Animation Blueprint Editor)中编辑。<ul>
+<li>动画蓝图用于处理角色的动画逻辑，包括动画状态机（State Machine）、混合空间（Blend Space）、骨骼控制等。它允许开发者根据角色的状态和输入条件，动态地控制角色的动画播放。</li>
+<li>动画蓝图包含动画图（Anim Graph）和事件图（Event Graph）。动画图用于定义动画状态和过渡，事件图用于处理与动画相关的事件和逻辑。</li>
+</ul>
+</li>
+</ul>
+<p>关卡蓝图： 参考<a target="_blank" rel="noopener" href="https://docs.unrealengine.com/4.27/zh-CN/ProgrammingAndScripting/Blueprints/UserGuide/Types/LevelBlueprint/">关卡蓝图 </a></p>
+<h2 id="创建动画蓝图"><a href="#创建动画蓝图" class="headerlink" title="创建动画蓝图"></a>创建动画蓝图</h2><p>动画蓝图：<br>创建动画蓝图，两种方式</p>
+<ol>
+<li>类容浏览器中的Mannequin-&gt;character-&gt;mesh 中选择一个骨架网格体， 然后右键创建-&gt; 动画-&gt; 动画蓝图</li>
+<li>在类容浏览器中，右键 创建高级资源-&gt;动画-&gt;动画蓝图  然后在target skeleton选择指定的骨架网格体关联</li>
+</ol>
+<p><img src="/static/img/3f0c2e49296ba585deef05a9ea5aefaf.Pasted%20image%2020240611185727.webp" alt="Pasted image 20240611185727.png"></p>
+<ol>
+<li><p>工具栏：动画蓝图编辑器中的 <strong>工具栏</strong> 允许你编译蓝图，保存，在 <strong>内容浏览器</strong> 中找到动画蓝图资源，以及定义 <strong>类设置（Class Settings）</strong> 和 <strong>类默认值（Class Defaults）</strong> 设置，与 <a target="_blank" rel="noopener" href="https://docs.unrealengine.com/4.27/zh-CN/ProgrammingAndScripting/Blueprints/Editor/UIComponents/Toolbar">蓝图编辑器工具栏</a> 相似。 工具栏最右侧的是 <a target="_blank" rel="noopener" href="https://docs.unrealengine.com/4.27/zh-CN/AnimatingObjects/SkeletalMeshAnimation/Persona/Toolbar">编辑器工具栏</a> ，它使你能够在虚幻引擎4中的不同动画工具间进行切换。</p>
+</li>
+<li><p>视口：<a target="_blank" rel="noopener" href="https://docs.unrealengine.com/4.27/zh-CN/AnimatingObjects/SkeletalMeshAnimation/Persona/Viewport">视口</a> 窗口允许你预览选定的骨架网格体上的动画资源的播放并提供与资源相关的信息。你可以更改照明模式，显示或隐藏骨架的骨骼，调整动画播放速度，甚至将骨架网格体设置为在转盘上自动旋转，以便从各个角度查看它。</p>
+</li>
+<li><p>图表：<strong>图表</strong> 面板包含两个主要的图表类型：包含用于触发骨架网格体姿势更新的动画事件节点的 <a target="_blank" rel="noopener" href="https://docs.unrealengine.com/4.27/zh-CN/AnimatingObjects/SkeletalMeshAnimation/AnimBlueprints/EventGraph">事件图表</a> 和用于计算供骨架网格体为当前帧实际采用的最终姿势的 <a target="_blank" rel="noopener" href="https://docs.unrealengine.com/4.27/zh-CN/AnimatingObjects/SkeletalMeshAnimation/AnimBlueprints/AnimGraph">动画图表</a> 。 这两个图表配合工作，共同驱动逻辑和角色在游戏进程中采用的姿势。</p>
+</li>
+<li><p>细节（Details）&#x2F;预览场景设置（Preview Scene Settings）：动画蓝图编辑器中的 <strong>细节（Details）</strong> 面板与蓝图编辑器中的 <a target="_blank" rel="noopener" href="https://docs.unrealengine.com/4.27/zh-CN/ProgrammingAndScripting/Blueprints/Editor/UIComponents/Details">细节面板</a> 相同，你可以在其中访问和编辑与任何已创建的变量以及已放置在图表中的节点相关的属性。同样位于此部分的是 <a target="_blank" rel="noopener" href="https://docs.unrealengine.com/4.27/zh-CN/AnimatingObjects/SkeletalMeshAnimation/Persona/PreviewSettings">预览设置</a> 选项卡，它使你能够定义要用作预览的 <strong>动画模式（Animation Mode）</strong> 或 <strong>动画（Animation）</strong> 等视口设置，切换用于预览的 <strong>骨架网格体</strong> ，以及要应用的视口照明和后期处理设置，以便你可以在应用不同照明的情况下预览设置。</p>
+</li>
+<li><p>我的蓝图（My Blueprint）：蓝图编辑器中还具有 <a target="_blank" rel="noopener" href="https://docs.unrealengine.com/4.27/zh-CN/ProgrammingAndScripting/Blueprints/Editor/UIComponents/MyBlueprint">我的蓝图（My Blueprint）</a> 面板，其中包含图表、函数、变量和动画蓝图中包含的其他相关属性的列表。</p>
+</li>
+<li><p>动画预览编辑器（Anim Preview Editor） &#x2F; 资源浏览器（Asset Browser）： <a target="_blank" rel="noopener" href="https://docs.unrealengine.com/4.27/zh-CN/AnimatingObjects/SkeletalMeshAnimation/Persona/BlueprintDefaults">动画预览编辑器</a> 允许你更改将在视口中更新骨架网格体的变量。 你也可切换到 <strong>编辑默认值（Edit Defaults）</strong> 模式并更改变量，然后将它们应用为默认值。 <a target="_blank" rel="noopener" href="https://docs.unrealengine.com/4.27/zh-CN/AnimatingObjects/SkeletalMeshAnimation/Persona/AssetBrowser">资源浏览器</a> 停靠在单独的选项卡中，它允许你查看与关联的骨架资源关联且可由其使用的所有动画资源。</p>
+</li>
+</ol>
+<h2 id="动画蓝图"><a href="#动画蓝图" class="headerlink" title="动画蓝图"></a>动画蓝图</h2><p> 每一个动画蓝图都有单独的事件图表(EventGraph)和动画图表(AnimGraph)， 状态机属于AnimGraph</p>
+<p><img src="/static/img/c1478f1e08fa00d7d850ce585e21f29d.Pasted%20image%2020240611191427.webp" alt="Pasted image 20240611191427.png"></p>
+<h3 id="事件图表-EventGraph"><a href="#事件图表-EventGraph" class="headerlink" title="事件图表(EventGraph)"></a><a target="_blank" rel="noopener" href="https://docs.unrealengine.com/4.27/zh-CN/AnimatingObjects/SkeletalMeshAnimation/AnimBlueprints/EventGraph/">事件图表(EventGraph)</a></h3><p>每个动画蓝图都有单独的 <strong>EventGraph</strong> ，它使用一组<strong>与动画相关的特殊事件</strong>来初始化节点序列。事件图表最常见的用途是更新 <a target="_blank" rel="noopener" href="https://docs.unrealengine.com/4.27/zh-CN/AnimatingObjects/SkeletalMeshAnimation/Blendspaces">混合空间</a> 和其他混合节点使用的值，以驱动动画图表中的动画。无论是关卡蓝图里面的EventGraph 还是ABP里面的Event Graph， 其使用方式都是添加一个或多个事件来充当<strong>进入节点</strong> ，然后链接函数调用， 流控制， 和节点 变量来执行所需操作</p>
+<p><img src="/static/img/dabccccde333878260ed628ca6e7f4ac.Pasted%20image%2020240612102528.webp" alt="Pasted image 20240612102528.png"><br>上图中事件更新动画，是每帧都会执行的函数， 其中白色的连线时执行顺序</p>
+<ol>
+<li>检查Pawn 拥有者 是否是合法的</li>
+<li>根据Pawn ower 获取其移动组件判断， pawn 是否在空中， 并设置Is In Air 这个变量</li>
+<li>实则1D  混合空间的一个速度<br>其中IsInAir 和 Speed 可以理解为在动画蓝图的命名空间里面时全局的， 这两个变量可以被动画图标 AnimGraph 访问</li>
+</ol>
+<h3 id="动画图表（AnimGraph）"><a href="#动画图表（AnimGraph）" class="headerlink" title="动画图表（AnimGraph） "></a><strong><a target="_blank" rel="noopener" href="https://docs.unrealengine.com/4.27/zh-CN/AnimatingObjects/SkeletalMeshAnimation/AnimBlueprints/AnimGraph/">动画图表（AnimGraph） </a></strong></h3><p>用于评估当前帧的骨架网格体最终姿势。默认情况下， 所有动画蓝图都有动画图表，可在其中放入 <a target="_blank" rel="noopener" href="https://docs.unrealengine.com/4.27/zh-CN/AnimatingObjects/SkeletalMeshAnimation/NodeReference">动画节点</a> 以采样动画序列，使用<strong>骨架</strong>控制执行动画混合或控制骨骼变形。 之后，逐帧将结果姿势应用到骨架网格体。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2024/12/08/UE%E8%93%9D%E5%9B%BE%EF%BC%9A%20%E7%AC%AC1%E9%83%A8%E5%88%86/" data-id="cm4fo4iqz00017stweqjab2es" data-title="UE蓝图： 第1部分" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/blog/" rel="tag">blog</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2024/12/08/HyperIQA%20%E5%9B%BE%E5%83%8F%E8%B4%A8%E9%87%8F%E8%AF%84%E4%BC%B0/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          HyperIQA 图像质量评估
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2024/12/08/init-blog/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">init_blog</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/CNN/">CNN</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lua-C/">lua && C++</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%93%9D%E5%9B%BE/">蓝图</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/" rel="tag">blog</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/blog/" style="font-size: 10px;">blog</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/12/">December 2024</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2024/12/08/UE%E8%93%9D%E5%9B%BE%EF%BC%9AUE%E7%AE%80%E5%8D%95%E5%8A%A8%E7%94%BB%E5%85%A5%E9%97%A8/">UE蓝图：UE简单动画入门</a>
+          </li>
+        
+          <li>
+            <a href="/2024/12/08/UE%E8%93%9D%E5%9B%BE%EF%BC%9A%E4%BB%BF%E7%85%A7UE%20%E8%93%9D%E5%9B%BE%E5%BC%80%E5%8F%91%E7%9A%84%E7%AE%80%E6%98%93%E8%93%9D%E5%9B%BE%E7%B3%BB%E7%BB%9F/">UE蓝图：仿照UE 蓝图开发的简易蓝图系统</a>
+          </li>
+        
+          <li>
+            <a href="/2024/12/08/%E5%B0%86%20Lua%20%E4%B8%8E%20C%20%E9%9B%86%E6%88%90%EF%BC%9A%E7%AC%AC%201%20%E9%83%A8%E5%88%86/">将 Lua 与 C 集成：第 1 部分</a>
+          </li>
+        
+          <li>
+            <a href="/2024/12/08/%E5%B0%86%20Lua%20%E4%B8%8E%20C%20%E9%9B%86%E6%88%90%EF%BC%9A%E7%AC%AC%202%20%E9%83%A8%E5%88%86/">将 Lua 与 C 集成：第 2 部分</a>
+          </li>
+        
+          <li>
+            <a href="/2024/12/08/%E5%B0%86%20Lua%20%E4%B8%8E%20C%20%E9%9B%86%E6%88%90%EF%BC%9A%E7%AC%AC%204%20%E9%83%A8%E5%88%86/">将 Lua 与 C 集成：第 4 部分</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2024 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

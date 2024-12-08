@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>UE蓝图：仿照UE 蓝图开发的简易蓝图系统 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="背景需求最近有一个改造现有功能的需求， 在不考虑现有架构的情况下设计一个类似UE 蓝图的通用蓝图功能， 有如下的要求  有输入节点  输出节点 可以添加各种节点，组织成一个函数流程 有蓝图全局变量 在程序的初始阶段，有一个build 的过程， 将这个蓝图里面的节点 build 为统一类型的函数集合以及变量的集合，需要考虑参数怎么组织，怎么获取 数据的输入输出类型怎么确定 在execute 阶段，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UE蓝图：仿照UE 蓝图开发的简易蓝图系统">
+<meta property="og:url" content="http://example.com/2024/12/08/UE%E8%93%9D%E5%9B%BE%EF%BC%9A%E4%BB%BF%E7%85%A7UE%20%E8%93%9D%E5%9B%BE%E5%BC%80%E5%8F%91%E7%9A%84%E7%AE%80%E6%98%93%E8%93%9D%E5%9B%BE%E7%B3%BB%E7%BB%9F/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="背景需求最近有一个改造现有功能的需求， 在不考虑现有架构的情况下设计一个类似UE 蓝图的通用蓝图功能， 有如下的要求  有输入节点  输出节点 可以添加各种节点，组织成一个函数流程 有蓝图全局变量 在程序的初始阶段，有一个build 的过程， 将这个蓝图里面的节点 build 为统一类型的函数集合以及变量的集合，需要考虑参数怎么组织，怎么获取 数据的输入输出类型怎么确定 在execute 阶段，">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/static/img/646f2736b01edd5e9fa2d019669a5c2f.image.webp">
+<meta property="og:image" content="http://example.com/static/img/46d2cf50f85702d8530b6c22cb4fdf52.image.webp">
+<meta property="og:image" content="http://example.com/static/img/9455b7b50c1f9ad8d7fb198852a99a18.image.webp">
+<meta property="og:image" content="http://example.com/static/img/409d75c28a3a344c528bca8f9f542af9.image.webp">
+<meta property="og:image" content="https://www.taozitech.fun/static/img/65d225cad3702209cbadcdfafb1e364c.image.webp">
+<meta property="article:published_time" content="2024-12-08T13:56:31.654Z">
+<meta property="article:modified_time" content="2024-12-04T03:28:08.366Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="blog">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/static/img/646f2736b01edd5e9fa2d019669a5c2f.image.webp">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/atom.xml" title="RSS Feed"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="Search"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-UE蓝图：仿照UE 蓝图开发的简易蓝图系统" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2024/12/08/UE%E8%93%9D%E5%9B%BE%EF%BC%9A%E4%BB%BF%E7%85%A7UE%20%E8%93%9D%E5%9B%BE%E5%BC%80%E5%8F%91%E7%9A%84%E7%AE%80%E6%98%93%E8%93%9D%E5%9B%BE%E7%B3%BB%E7%BB%9F/" class="article-date">
+  <time class="dt-published" datetime="2024-12-08T13:56:31.654Z" itemprop="datePublished">2024-12-08</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E8%93%9D%E5%9B%BE/">蓝图</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      UE蓝图：仿照UE 蓝图开发的简易蓝图系统
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="背景需求"><a href="#背景需求" class="headerlink" title="背景需求"></a>背景需求</h2><p>最近有一个改造现有功能的需求， 在不考虑现有架构的情况下设计一个类似UE 蓝图的通用蓝图功能， 有如下的要求</p>
+<ol>
+<li>有输入节点  输出节点</li>
+<li>可以添加各种节点，组织成一个函数流程</li>
+<li>有蓝图全局变量</li>
+<li>在程序的初始阶段，有一个build 的过程， 将这个蓝图里面的节点 build 为统一类型的函数集合以及变量的集合，需要考虑参数怎么组织，怎么获取</li>
+<li>数据的输入输出类型怎么确定</li>
+<li>在execute 阶段， 根据build 阶段的产物，按照既定规则，要求初步实现顺序流程， 分支流程，循环流程</li>
+</ol>
+<span id="more"></span>
+<p>参考UE的蓝图如下：</p>
+<p><img src="/static/img/646f2736b01edd5e9fa2d019669a5c2f.image.webp" alt="image.png"><br><img src="/static/img/46d2cf50f85702d8530b6c22cb4fdf52.image.webp" alt="image.png"></p>
+<h2 id="初版实现形式"><a href="#初版实现形式" class="headerlink" title="初版实现形式"></a>初版实现形式</h2><p>初步蓝图模块名称为GeneralGraph, 下面是对蓝图的面的功能做的定义设计</p>
+<ul>
+<li><code>IGeneralGraphNode</code> 是一个基类， 默认没有Pin(引脚)， 每个节点继承自<code>IGeneralGraphNode</code>的节点，可以自行在代码里面添加Pin</li>
+<li>GeneralGraph  里面  默认有一个start 节点， 默认有一个Pin, 用三角符号表示， 如下， 这个Pin 不作为函数的输入， 如果需要有输入，可以新增加一个pin, 默认是没有End 节点， 可以自己添加End节点, 默认也有一个Pin， 用三角符号表示</li>
+<li>start End 节点， 这两个节点继承IGeneralGraphNode</li>
+</ul>
+<p><img src="/static/img/9455b7b50c1f9ad8d7fb198852a99a18.image.webp" alt="image.png"></p>
+<ul>
+<li>执行节点基类，ExecuteNodeBase 默认有Enter Pin 和Finish Pin</li>
+<li>函数节点类， CallFunctionNode，继承自ExcuteNodeBase 该节点有一个函数指针， 指向被注册到函数库里面的函数, 一般为C++或者Lua函数反射， 既可以在编辑器层面获取， 也可以根据名称在Runtime 拿到， 只需要统一一下外观，和逻辑。 C++函数反射到Graph 没有变量信息， 需要再处理一下</li>
+<li>Branch 节点 </li>
+<li>While Loop 节点</li>
+<li>ForEach 节点</li>
+</ul>
+<p><img src="/static/img/409d75c28a3a344c528bca8f9f542af9.image.webp" alt="image.png"></p>
+<ul>
+<li>子函数节点， 该节点是能够双击继续展开的节点，内部可以继续使用其他节点继续构建逻辑， 包含一个GeneralGraphInstance*</li>
+<li>非执行节点， 包括 函数调用的节点， 逻辑运算节点， getValue 这种节点， 没有执行Pin ， 会有输入输出节点<br><img src="https://www.taozitech.fun/static/img/65d225cad3702209cbadcdfafb1e364c.image.webp"></li>
+</ul>
+<h2 id="通用蓝图构建方案"><a href="#通用蓝图构建方案" class="headerlink" title="通用蓝图构建方案"></a>通用蓝图构建方案</h2><p>general_graph  目前定位和其他的graph 是平级的，但是可以作为其他图的子节点进行嵌套</p>
+<h3 id="Build-过程"><a href="#Build-过程" class="headerlink" title="Build 过程"></a>Build 过程</h3><p>当在编辑器层，编辑一张Graph 之后，作为资产保存，在游戏运行之后，会有对应的Runtime GeneralGraph 的Definition结构和Graph Asset里面的内容一一对应。在构建过程中，将Graph资源读取到Runtime 的definition里面，然后再以此为单位构建对应的GeneralGraphInstance， 该Instance 就是一张图执行的最小单元，里面包含了Graph的逻辑关系， 即GeneralGraphInstance执行过程是按照连接图的逻辑进行</p>
+<ol>
+<li>GeneralGraphInstance的Build阶段：<ul>
+<li>保存 start_node的index , 考虑到后面可能有循环的结构， 不能用数组， 链表等线性表来保存， 直接使用m_nodes数组里面对应的编号来索引startNode 然后根据EnterPin  FinishPin</li>
+<li>GeneralGraphInstance 保存一个m_owner_general_node*, 然后将GeneralGraphInstance的getInput和 owner_node的getInput 联系起来</li>
+<li>在execute 阶段可以获取owner node 的getInput 的参数地址，然后执行</li>
+<li>execute阶段执行完之后， 如果有返回值，将其保存到GeneralGraphInstance的成员变量之中</li>
+</ul>
+</li>
+<li>Start End 节点的构建： 这两个节点比较特殊， 作为一个RawGraphDefinition对应的graph里面的入口和出口，只有一个对应的ExecPin （存在graph 里面没有End 节点的情况）<ul>
+<li>StartNode build，会保存一个所属GeneralGraph的指针， 用于GetInput 从而获取General Graph Instance 的DynamicArray<StaticVarience> m_general_graph_parameters_in作为参数输入</li>
+<li>GetInput 将指向的值获取下来保存到StartNode类里面</li>
+<li>execute() 将保存的值， 作为参数传给节点目标函数</li>
+<li>End 节点执行完了之后 直接将结果返回给 GeneralGraphInstance</li>
+<li>这里改为End 节点执行完了后将结果直接写到GeneralGraphInstance的内存里面面， 如果没有End 节点就肯定没有返回值， 有返回值一定得通过End 节点返回</li>
+</ul>
+</li>
+<li>ExecuteNodeBase 执行节点， 目前可以看到如上面UE 图中的 ‘打印字符串’ ‘打印文本’ ‘Mult Pi’等节点都是可执行节点，但是不排除还有其他的节点内部不存在特殊流程的节点</li>
+<li>CallFunctionNode 用于将C++ Lua函数包装起来的新的节点， 在build 阶段可以直接将函数地址保存到Function，在execute 阶段就直接执行</li>
+<li>SubGraphFunctionNode 是一类特殊节点， 双击进去可以进入子图，该子图里面同样是GeneralGraph， 里面的节点逻辑组合而成了SubGraphFunctionNode的执行逻辑， SubGraphFunctionNode 里面包含一个GeneralGraphInstance*的成员变量指向对应的子图， 可在execute阶段执行子图里面的逻辑， 执行完成后的结果保存在SubGraphFunctionNode 的对应的输出pin脚里面</li>
+<li>BranhNode  WhileLoopNode 等节点，用于执行一般意义上的逻辑语句</li>
+<li>SetBlackBoardNode节点， 用于设置在蓝图作用范围的全局变量， 是一个执行节点， 有输入， 输出， input 可以作为output 使用</li>
+<li>GetBlackBoardNode 节点， 用于根据GUID 获取 对应的黑板变量</li>
+<li>LogicNode 如AND  OR  XOR 等节点</li>
+</ol>
+<h2 id="Pin的类型"><a href="#Pin的类型" class="headerlink" title="Pin的类型"></a>Pin的类型</h2><p>根据上面UML图的表述， Pin 引脚也分为几种类型：</p>
+<ol>
+<li>GeneralGraphExecPin 是用于连接start End 执行节点的执行流程， 内部不保存输入或输出数据， 通常命名为<br> EnterPin &#x2F; FinishPin</li>
+<li>GeneralGraphinputPin 类似于一个指针，指向前置的Connected Node 的Output Pin, 在execute阶段，可以根据指向关系获取Connected Node的Output Pin的数据作为当前节点对应逻辑的输入参数</li>
+<li>GeneranGraphOutputPin 和逻辑上的下一个节点的input pin 连接， GeneranGraphOutputPin 里面包含一个数据结构，用于保存该节点的计算结果</li>
+<li>用于保存节点的计算结果， 可以命名一个数据结构， 比如DefaultVariance, 该结构里面包含一个固定长度的char数组， 以及用来保存其类型的type_id, 可以通过typeid来获取， 比如<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;typeinfo&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> i = <span class="number">5</span>;</span><br><span class="line">    <span class="type">float</span> f = <span class="number">3.14f</span>;</span><br><span class="line">    <span class="type">double</span> d = <span class="number">2.71828</span>;</span><br><span class="line"></span><br><span class="line">    <span class="type">const</span> std::type_info&amp; type_i = <span class="built_in">typeid</span>(i);</span><br><span class="line">    <span class="type">const</span> std::type_info&amp; type_f = <span class="built_in">typeid</span>(f);</span><br><span class="line">    <span class="type">const</span> std::type_info&amp; type_d = <span class="built_in">typeid</span>(d);</span><br><span class="line"></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;Type of i is: &quot;</span> &lt;&lt; type_i.<span class="built_in">name</span>() &lt;&lt; std::endl;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;Type of f is: &quot;</span> &lt;&lt; type_f.<span class="built_in">name</span>() &lt;&lt; std::endl;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;Type of d is: &quot;</span> &lt;&lt; type_d.<span class="built_in">name</span>() &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+输出为：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Type of i is: int</span><br><span class="line">Type of f is: float</span><br><span class="line">Type of d is: double </span><br><span class="line">    </span><br></pre></td></tr></table></figure>
+当然，可以扩写这部分代码， 使得DefaultVariance可以保存更多种值类型， 也可以参考UE的Pin的方案</li>
+</ol>
+<h2 id="Execute-阶段"><a href="#Execute-阶段" class="headerlink" title="Execute 阶段"></a>Execute 阶段</h2><ol>
+<li>GraphInstance 的execute() 流程<ul>
+<li>引擎的更上一层的逻辑中有一个Instance manager 管理多个GeneralGraphInstance， 在运行时确定使用哪个Instance, 然后SetInstanceInput()，然后执行instance的 execute()函数</li>
+</ul>
+</li>
+<li>startNode 的execute() 流程<ul>
+<li>从build阶段指定位置获取输入参数作为该Graph 里面start 节点的输入，如果没有get到，则表示start 没有input</li>
+<li>然后执行start节点的getInput()流程，将获取到的值作为input， 如果没获取到则输入为空</li>
+<li>执行start 节点的execute()流程，将执行结果保存到returen pin的DefaultVarience里面</li>
+<li>确定下一个执行节点是哪一个， 然后将这个节点塞到GeneralGraphInstance 的队列里面？</li>
+</ul>
+</li>
+<li>按照执行流程， 依次遍历执行流程上的节点，先getInput(), 然后调用excute()函数<ul>
+<li>对于该节点A而言，如果所需的input 参数来自前置的非执行节点B，则A调用GetInput()函数的过程需要调用前置节点B的GetInput()和Execute()， 如果B节点依然有前置节点C则依此类推，从而获得A节点执行过程所需的输入参数,这个参数会保存在B节点的out pin的 staticvarience 的pin 里面。 如果遇到了执行节点，或者Start节点，那么就直接从连接的pin 拿去payload </li>
+<li>从各个前置节点out pin 那里一次获得所有pin payload ，作为输入参数，并执行excute()</li>
+</ul>
+</li>
+<li>对于SubGraphFunctionNode 节点，(初步可可以允许嵌套， 但是应该需要做一个限制， 大于一定层数之后就报错)<ul>
+<li>按照大步骤2的流程，先执行getInput()，准备好所需的输入参数 </li>
+<li>接着执行它的execute()函数，相当于切换一次上下文， 将所需参数通过GraphInstance* 指针调用它的SetInstanceInput() ,设置到GraphInstance 里面， 执行execute()</li>
+<li>接着按照大步骤2开始重复执行</li>
+</ul>
+</li>
+<li>当前GraphInstance 执行完之后，将最后执行的结果保存到GraphInstance的<code>Array&lt;DefaultVarience&gt; </code>m_general_graph_parameters_out 里面 </li>
+<li>SubGraphFunctionNode 或者其他的节点可以通过GraphInstance  的getInstanceResult来获取graph 最终的执行结果</li>
+</ol>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>历时两周，包括前期的调研， 方案的讨论，以及最后的coding共，最终在公司内部的Engine上面完成了这样的一套仿照蓝图的功能，功能不是很全，因为需要考虑到和已有功能的兼容， 因此很多地方只得做妥协，有不足的地方后面再优化</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2024/12/08/UE%E8%93%9D%E5%9B%BE%EF%BC%9A%E4%BB%BF%E7%85%A7UE%20%E8%93%9D%E5%9B%BE%E5%BC%80%E5%8F%91%E7%9A%84%E7%AE%80%E6%98%93%E8%93%9D%E5%9B%BE%E7%B3%BB%E7%BB%9F/" data-id="cm4fo4ir200057stw16kh9gnf" data-title="UE蓝图：仿照UE 蓝图开发的简易蓝图系统" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/blog/" rel="tag">blog</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2024/12/08/UE%E8%93%9D%E5%9B%BE%EF%BC%9AUE%E7%AE%80%E5%8D%95%E5%8A%A8%E7%94%BB%E5%85%A5%E9%97%A8/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          UE蓝图：UE简单动画入门
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2024/12/08/%E5%B0%86%20Lua%20%E4%B8%8E%20C%20%E9%9B%86%E6%88%90%EF%BC%9A%E7%AC%AC%201%20%E9%83%A8%E5%88%86/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">将 Lua 与 C 集成：第 1 部分</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/CNN/">CNN</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lua-C/">lua && C++</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%93%9D%E5%9B%BE/">蓝图</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/" rel="tag">blog</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/blog/" style="font-size: 10px;">blog</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/12/">December 2024</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2024/12/08/UE%E8%93%9D%E5%9B%BE%EF%BC%9AUE%E7%AE%80%E5%8D%95%E5%8A%A8%E7%94%BB%E5%85%A5%E9%97%A8/">UE蓝图：UE简单动画入门</a>
+          </li>
+        
+          <li>
+            <a href="/2024/12/08/UE%E8%93%9D%E5%9B%BE%EF%BC%9A%E4%BB%BF%E7%85%A7UE%20%E8%93%9D%E5%9B%BE%E5%BC%80%E5%8F%91%E7%9A%84%E7%AE%80%E6%98%93%E8%93%9D%E5%9B%BE%E7%B3%BB%E7%BB%9F/">UE蓝图：仿照UE 蓝图开发的简易蓝图系统</a>
+          </li>
+        
+          <li>
+            <a href="/2024/12/08/%E5%B0%86%20Lua%20%E4%B8%8E%20C%20%E9%9B%86%E6%88%90%EF%BC%9A%E7%AC%AC%201%20%E9%83%A8%E5%88%86/">将 Lua 与 C 集成：第 1 部分</a>
+          </li>
+        
+          <li>
+            <a href="/2024/12/08/%E5%B0%86%20Lua%20%E4%B8%8E%20C%20%E9%9B%86%E6%88%90%EF%BC%9A%E7%AC%AC%202%20%E9%83%A8%E5%88%86/">将 Lua 与 C 集成：第 2 部分</a>
+          </li>
+        
+          <li>
+            <a href="/2024/12/08/%E5%B0%86%20Lua%20%E4%B8%8E%20C%20%E9%9B%86%E6%88%90%EF%BC%9A%E7%AC%AC%204%20%E9%83%A8%E5%88%86/">将 Lua 与 C 集成：第 4 部分</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2024 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
