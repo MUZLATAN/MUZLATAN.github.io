@@ -14,7 +14,7 @@
 <meta property="og:description" content="图像质量评估中的HyperIQA神经网络模型HyperIQA:论文地址论文源代码：github这篇文章是针对于目前BIQA任务中，大多数方法是预测合成失真图片的，对真实场景下的失真问题很少，因此这篇文章的motivation是解决真实场景下的IQA问题。">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2024-12-08T13:56:31.637Z">
-<meta property="article:modified_time" content="2024-12-08T14:41:33.682Z">
+<meta property="article:modified_time" content="2024-12-08T14:43:24.296Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="blog">
 <meta name="twitter:card" content="summary">
@@ -107,7 +107,7 @@
 <li>相比于合成的失真图，例如LIVE，TOD2013，CSIQ仅包含不超过30张的参考图，这些数据集中包含的内容信息非常少。而对于真实场景下的数据集例如Live-Challenge和Koniq10k，包含1169和10073张图片，它们的内容信息量非常丰富，巨大的内容差异对于IQA方法的泛化性是一个巨大的挑战。</li>
 </ul>
 <p>对于失真类型的不同与内容的不同，对于真实图片的IQA还有很多问题没有被解决。如图1所示，随着图片的不同，提取到的特征也不同。  </p>
-<p>![quality.weba](<a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/MUZLATAN/MUZLATAN.github.io/refs/heads/main/2024/12/08/HyperIQA%20%E5%9B%BE%E5%83%8F%E8%B4%A8%E9%87%8F%E8%AF%84%E4%BC%B0/db568cb806b82b23.v2-5a9387fa8e7a7e593d9865d63e53d8a0_720w.webp">HyperIQA 图像质量评估\db568cb806b82b23.v2-5a9387fa8e7a7e593d9865d63e53d8a0_720w.webp</a>)<br>这也导致了预测图像质量的非一致性。在之前的工作中，无论是人工提取的feature还是使用浅层网络架构都不能解决合成IQA任务的同时处理真实场景下的扭曲。这也意味着low level features并不能足够强地表征真实场景下的复杂失真。因此，有很多尝试去利用深度语义特征作为质量的描述：<strong>深度模型在分类任务上进行预训练后被用来预测真实场景下的失真</strong>。这个假设背后的依据是真实失真是存在于分类任务的数据集中例如ImageNet，这些预训练好的特征已经具备了一些<em>quality aware</em>。</p>
+<p>![quality.webp](<a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/MUZLATAN/MUZLATAN.github.io/refs/heads/main/2024/12/08/HyperIQA%20%E5%9B%BE%E5%83%8F%E8%B4%A8%E9%87%8F%E8%AF%84%E4%BC%B0/db568cb806b82b23.v2-5a9387fa8e7a7e593d9865d63e53d8a0_720w.webp">HyperIQA 图像质量评估\db568cb806b82b23.v2-5a9387fa8e7a7e593d9865d63e53d8a0_720w.webp</a>)<br>这也导致了预测图像质量的非一致性。在之前的工作中，无论是人工提取的feature还是使用浅层网络架构都不能解决合成IQA任务的同时处理真实场景下的扭曲。这也意味着low level features并不能足够强地表征真实场景下的复杂失真。因此，有很多尝试去利用深度语义特征作为质量的描述：<strong>深度模型在分类任务上进行预训练后被用来预测真实场景下的失真</strong>。这个假设背后的依据是真实失真是存在于分类任务的数据集中例如ImageNet，这些预训练好的特征已经具备了一些<em>quality aware</em>。</p>
 <p>尽管这些尝试取得了一些提升，但是更多的研究仍然欠缺。对于采用网络架构针对于IQA任务识别物体的方式仍有两个缺陷。<br>现在的深度学习模型只能针对分类任务学习全局特征。但是真实的失真分布不规律，大部分是集中于某个局部区域。忽略掉局部模式会导致预测的质量与人眼的感官非一致性。因为人类视觉系统（HVS）对于局部失真更加敏感，当图片的其它区域质量较好时。<br>对于图片内容的不同，人类对物体的质量感知也会不同。对于一张蓝色的天空，人眼会认为是高质量的，但是IQA method会认为是一个模糊的图片由于图片包含了大量平坦区域。因此，在识别物体内容前去预测图片质量并不符合人类理解这个世界的规律。在HVS中，自上而下的感知模型，意味着人类在注意其余子任务例如质量评价前尝试去理解图片。然而对于当前的模型，融合IQA任务进语义识别网络中，使得网络同时识别图片内容与质量，让模型在识别图片内容后评价图片质量是更合适的。<br>在这篇文章中主要是发展真实IQA方法，考虑到出现在真实世界中的两大挑战。失真多样性与内容多样性。作者提出了local distortion aware模块去从多尺度提取局部特征，以此来解决失真多样性。作者引入了<strong>Hyper Network</strong>结构能动态的生成权重，为了质量预测网络去覆盖广泛的内容多样性。总得来说，本篇文章的贡献主要有以下三点：</p>
 <ul>
 <li>作者提出了一种新型的IQA模型，能自适应图像质量预测。</li>
