@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>将 Lua 与 C 集成：第 4 部分 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="将 Lua 与 C 集成：第 4 部分元表（Metatable）元表是一种特殊的表，可以用来改变其他表或用户数据（userdata）的行为。通过元表，Lua 提供了一种机制，可以让我们定义一些特殊的操作（比如加法、减法、索引等）如何在特定表上执行。元表的主要用途是实现运算符重载和表的自定义行为。 元表的使用通过设置一些特定的键（称为元方法）来实现。例如，__index、__newindex、__a">
+<meta property="og:type" content="article">
+<meta property="og:title" content="将 Lua 与 C 集成：第 4 部分">
+<meta property="og:url" content="http://example.com/2024/12/08/%E5%B0%86%20Lua%20%E4%B8%8E%20C%20%E9%9B%86%E6%88%90%EF%BC%9A%E7%AC%AC%204%20%E9%83%A8%E5%88%86/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="将 Lua 与 C 集成：第 4 部分元表（Metatable）元表是一种特殊的表，可以用来改变其他表或用户数据（userdata）的行为。通过元表，Lua 提供了一种机制，可以让我们定义一些特殊的操作（比如加法、减法、索引等）如何在特定表上执行。元表的主要用途是实现运算符重载和表的自定义行为。 元表的使用通过设置一些特定的键（称为元方法）来实现。例如，__index、__newindex、__a">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-12-08T14:06:07.025Z">
+<meta property="article:modified_time" content="2024-12-04T03:28:08.435Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="blog">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/atom.xml" title="RSS Feed"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="Search"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-将 Lua 与 C 集成：第 4 部分" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2024/12/08/%E5%B0%86%20Lua%20%E4%B8%8E%20C%20%E9%9B%86%E6%88%90%EF%BC%9A%E7%AC%AC%204%20%E9%83%A8%E5%88%86/" class="article-date">
+  <time class="dt-published" datetime="2024-12-08T14:06:07.025Z" itemprop="datePublished">2024-12-08</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/lua-C/">lua && C++</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      将 Lua 与 C 集成：第 4 部分
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="将-Lua-与-C-集成：第-4-部分"><a href="#将-Lua-与-C-集成：第-4-部分" class="headerlink" title="将 Lua 与 C 集成：第 4 部分"></a>将 Lua 与 C 集成：第 4 部分</h1><h2 id="元表（Metatable）"><a href="#元表（Metatable）" class="headerlink" title="元表（Metatable）"></a>元表（Metatable）</h2><p>元表是一种特殊的表，可以用来改变其他表或用户数据（userdata）的行为。通过元表，Lua 提供了一种机制，可以让我们定义一些特殊的操作（比如加法、减法、索引等）如何在特定表上执行。元表的主要用途是实现运算符重载和表的自定义行为。</p>
+<p>元表的使用通过设置一些特定的键（称为元方法）来实现。例如，<code>__index</code>、<code>__newindex</code>、<code>__add</code> 等。</p>
+<span id="more"></span>
+
+<p>以下是元方法的完整列表：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">__add</span> 加法操作 （+)</span><br><span class="line"></span><br><span class="line">__aub 减法运算 （-)</span><br><span class="line"></span><br><span class="line"><span class="built_in">__mul</span> 乘法运算 （*)</span><br><span class="line"></span><br><span class="line"><span class="built_in">__div</span>  除法操作 （/)</span><br><span class="line"></span><br><span class="line"><span class="built_in">__mod</span> 模运算 （%)</span><br><span class="line"></span><br><span class="line"><span class="built_in">__pow</span> 幂运算 （^)</span><br><span class="line"></span><br><span class="line"><span class="built_in">__unm</span> 否定运算（一元减号）（一元 -)</span><br><span class="line"></span><br><span class="line">__idiv 楼层划分 （//)</span><br><span class="line"></span><br><span class="line">__band 按位和运算 （&amp;)</span><br><span class="line"></span><br><span class="line">__bor 按位 或运算 （|)</span><br><span class="line"></span><br><span class="line">__bxor 按位 xor 运算（二进制~)</span><br><span class="line"></span><br><span class="line">__bnot 按位 <span class="keyword">not</span> 操作 （一元~)</span><br><span class="line"></span><br><span class="line">__shl 按位左移运算 （&lt;&lt;)</span><br><span class="line"></span><br><span class="line">__shr 按位右移操作 （&gt;&gt;)</span><br><span class="line"></span><br><span class="line"><span class="built_in">__concat</span> 串联运算 （..)</span><br><span class="line"></span><br><span class="line"><span class="built_in">__len</span> 长度运算 （#)</span><br><span class="line"></span><br><span class="line"><span class="built_in">__eq</span> 相等性检验 （==)</span><br><span class="line"></span><br><span class="line"><span class="built_in">__lt</span> 测试小于 （&lt;)</span><br><span class="line"></span><br><span class="line"><span class="built_in">__le</span> 小于或等于 （&lt;=)</span><br><span class="line"></span><br><span class="line"><span class="built_in">__index</span> 该值正在编制索引 （[])</span><br><span class="line"></span><br><span class="line"><span class="built_in">__newindex</span> 正在新索引 （[] =)</span><br><span class="line"></span><br><span class="line"><span class="built_in">__call</span> 调用操作（作为函数执行）（())</span><br><span class="line"></span><br><span class="line"><span class="built_in">__tostring</span>  <span class="built_in">tostring</span>（） 用于将值转换为字符串</span><br><span class="line"></span><br><span class="line">__close  待关闭值超出范围</span><br><span class="line"></span><br><span class="line"><span class="built_in">__gc</span> 该值即将被垃圾回收</span><br></pre></td></tr></table></figure>
+
+<p>一旦元表被分配给一个值，Lua 就会在需要的时候调用元方法，并且对 Lua 程序完全不可见。</p>
+<p>元表是 Lua 中最强大的概念之一，尤其是当与用户数据结合使用时。元表的概念强调了 Lua 中最强大的范式，即提供机制，而不是策略。</p>
+<p>例如，虽然 Lua 本身不是一种面向对象的语言，但通过正确使用元表可以很容易地使它成为一种语言。</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 用户数据</span></span><br><span class="line"><span class="keyword">local</span> t = &#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125; </span><br><span class="line"></span><br><span class="line"><span class="comment">-- 定义一个元表 </span></span><br><span class="line"><span class="keyword">local</span> mt = </span><br><span class="line">&#123; </span><br><span class="line">	<span class="built_in">__index</span> = <span class="function"><span class="keyword">function</span><span class="params">(table, key)</span></span> </span><br><span class="line">		<span class="built_in">print</span>(<span class="string">&quot;Accessing element &quot;</span> .. <span class="built_in">tostring</span>(key)) </span><br><span class="line">		<span class="keyword">return</span> <span class="built_in">table</span>[key] </span><br><span class="line">	<span class="keyword">end</span>, </span><br><span class="line">	<span class="built_in">__newindex</span> = <span class="function"><span class="keyword">function</span><span class="params">(table, key, value)</span></span> </span><br><span class="line">		<span class="built_in">print</span>(<span class="string">&quot;Setting element &quot;</span> .. <span class="built_in">tostring</span>(key) .. <span class="string">&quot; to &quot;</span> .. <span class="built_in">tostring</span>(value)) </span><br><span class="line">		<span class="built_in">rawset</span>(<span class="built_in">table</span>, key, value) </span><br><span class="line">	<span class="keyword">end</span></span><br><span class="line">&#125; </span><br><span class="line"></span><br><span class="line"><span class="comment">-- 给t设置元表 </span></span><br><span class="line"><span class="built_in">setmetatable</span>(t, mt) </span><br><span class="line"></span><br><span class="line"><span class="comment">-- 访问表的元素，会触发元方法 __index </span></span><br><span class="line"><span class="built_in">print</span>(t[<span class="number">1</span>]) <span class="comment">-- 输出：Accessing element 1 1 </span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 修改表的元素，会触发元方法 __newindex </span></span><br><span class="line">t[<span class="number">4</span>] = <span class="number">4</span> <span class="comment">-- 输出：Setting element 4 to 4</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>[!NOTE] Thinks<br>Metatable 的本质其实就是它的名字所意味的那样：一张关于表的表, 上面例子中， t 是一张Table。Table 装着数据和功能，metatable 则装着关于 table 的数据和功能。你可以把它想象成一个 table 的控制台， 它能改变metatable的内容，也能改变Table的特征和行为。比如上面例子中__index 可以用来访问表的元素， 这时候如果 让__index &#x3D; _G，那么当访问表的元素即可以从全局的变量中去找， _G 表示全局的空间</p>
+</blockquote>
+<h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><p>在lua 5.1版本之前， 可以使用setfenv()来给函数设置环境<br>setfenv(f, table)：设置一个函数的环境<br>（1）当第一个参数为一个函数时，表示设置该函数的环境<br>（2）当第一个参数为一个数字时，为1代表当前函数，2代表调用自己的函数，3代表调用自己的函数的函数，以此类推</p>
+<p><strong>性质：函数的环境，其实一个环境就是一个表，该函数被限定为只能访问该表中的域，或在函数体内自己定义的变量。 setfenv的这一特性可以用来做模块加载来使用</strong></p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">local</span> FuncEnv=&#123;&#125;</span><br><span class="line"><span class="built_in">setmetatable</span>(FuncEnv, &#123;<span class="built_in">__index</span> = <span class="built_in">_G</span>&#125;)</span><br><span class="line"><span class="keyword">local</span> func=<span class="built_in">loadfile</span>(<span class="string">&quot;a.lua&quot;</span>)</span><br><span class="line"><span class="built_in">setfenv</span>(func,FuncEnv)()<span class="comment">--等价于setenv(func,FuncEnv);func();</span></span><br><span class="line">FuncEnv.Test()<span class="comment">--FuncEnv就是新的模块啦，可以访问其中函数</span></span><br></pre></td></tr></table></figure>
+<p>其实lua内部的model命令或者函数也是用的这个原理<br>其中a.lua为如下：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Test</span><span class="params">()</span></span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Test&quot;</span>)</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<p>setfen示例解析：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 一个环境就是一个表，该表记录了新环境能够访问的全部域</span></span><br><span class="line">newfenv = &#123;&#125;</span><br><span class="line"><span class="built_in">setfenv</span>(<span class="number">1</span>, newfenv)</span><br><span class="line"><span class="built_in">print</span>(<span class="number">1</span>)        <span class="comment">-- print 为nil  因为它是global环境下的， </span></span><br></pre></td></tr></table></figure>
+<p>通过改进，可以这样继承已有域</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">newfenv=&#123;<span class="built_in">_G</span>=<span class="built_in">_G</span>,a=<span class="number">3</span>&#125;</span><br><span class="line">b=<span class="number">5</span></span><br><span class="line"><span class="built_in">setfenv</span>(<span class="number">1</span>,newfenv)  <span class="comment">--当前函数被限定在newfenv表中，按照性质只能访问newfenv中的域</span></span><br><span class="line"><span class="built_in">_G</span>.<span class="built_in">print</span>(a)   <span class="comment">--3</span></span><br><span class="line"><span class="built_in">_G</span>.<span class="built_in">print</span>(<span class="built_in">_G</span>.b)   <span class="comment">--5  这里的print函数，变量b都是全局环境中的值，访问时加上_G限定</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+<p>任何赋值操作都对新表进行，不用担心误操作修改了全局变量表。另外，你仍然可以通过_G修改全局变量：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">newfenv = &#123;&#125;</span><br><span class="line"><span class="built_in">setmetatable</span>(newfenv, &#123;<span class="built_in">__index</span> = <span class="built_in">_G</span>&#125;)</span><br><span class="line"><span class="built_in">setfenv</span>(<span class="number">1</span>, newfenv)</span><br><span class="line"><span class="built_in">print</span>(<span class="number">1</span>)        <span class="comment">-- 1 新环境直接继承了全局环境的所有域，好处：可以不需要通过_G来手动调用</span></span><br><span class="line"><span class="comment">-- 这样，当访问到函数中不存在的变量时，会自动在_G中查找。对于当前函数和_G都存在的变量，可以通过是否用_G--- 显示调用来区分，比如如果有两个a，那么_G.a表示继承来的，a就是当前函数环境的。</span></span><br><span class="line"><span class="comment">-- 另外，可以通过getfenv(f)函数查看函数所处的环境，默认会返回全局环境_G。</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2024/12/08/%E5%B0%86%20Lua%20%E4%B8%8E%20C%20%E9%9B%86%E6%88%90%EF%BC%9A%E7%AC%AC%204%20%E9%83%A8%E5%88%86/" data-id="cm4fofqxd000fm0twfwx8dw95" data-title="将 Lua 与 C 集成：第 4 部分" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/blog/" rel="tag">blog</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2024/12/08/%E5%B0%86%20Lua%20%E4%B8%8E%20C%20%E9%9B%86%E6%88%90%EF%BC%9A%E7%AC%AC%202%20%E9%83%A8%E5%88%86/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          将 Lua 与 C 集成：第 2 部分
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2024/12/08/UE%E8%93%9D%E5%9B%BE%EF%BC%9AUE%E7%AE%80%E5%8D%95%E5%8A%A8%E7%94%BB%E5%85%A5%E9%97%A8/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">UE蓝图：UE简单动画入门</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/CNN/">CNN</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lua-C/">lua && C++</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%93%9D%E5%9B%BE/">蓝图</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/" rel="tag">blog</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/blog/" style="font-size: 10px;">blog</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/12/">December 2024</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2024/12/08/%E5%B0%86%20Lua%20%E4%B8%8E%20C%20%E9%9B%86%E6%88%90%EF%BC%9A%E7%AC%AC%206%20%E9%83%A8%E5%88%86/">将 Lua 与 C 集成：第 6 部分</a>
+          </li>
+        
+          <li>
+            <a href="/2024/12/08/%E5%B0%86%20Lua%20%E4%B8%8E%20C%20%E9%9B%86%E6%88%90%EF%BC%9A%E7%AC%AC%201%20%E9%83%A8%E5%88%86/">将 Lua 与 C 集成：第 1 部分</a>
+          </li>
+        
+          <li>
+            <a href="/2024/12/08/%E5%B0%86%20Lua%20%E4%B8%8E%20C%20%E9%9B%86%E6%88%90%EF%BC%9A%E7%AC%AC%203%20%E9%83%A8%E5%88%86/">将 Lua 与 C 集成：第 3 部分</a>
+          </li>
+        
+          <li>
+            <a href="/2024/12/08/%E5%B0%86%20Lua%20%E4%B8%8E%20C%20%E9%9B%86%E6%88%90%EF%BC%9A%E7%AC%AC%205%20%E9%83%A8%E5%88%86/">将 Lua 与 C 集成：第 5 部分</a>
+          </li>
+        
+          <li>
+            <a href="/2024/12/08/%E5%B0%86%20Lua%20%E4%B8%8E%20C%20%E9%9B%86%E6%88%90%EF%BC%9A%E7%AC%AC%202%20%E9%83%A8%E5%88%86/">将 Lua 与 C 集成：第 2 部分</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2024 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

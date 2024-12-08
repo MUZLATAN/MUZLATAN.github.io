@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>将 Lua 与 C 集成：第 2 部分 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="将 Lua 与 C 集成：第 2 部分Lua C API 为主机程序提供了一组丰富且非常精心设计的函数，用于与 Lua 脚本进行交互。使用 Lua C API，不仅可以创建或关闭 Lua 状态、打开标准 Lua 库并从文件执行 Lua 代码，还可以创建更多。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="将 Lua 与 C 集成：第 2 部分">
+<meta property="og:url" content="http://example.com/2024/12/08/%E5%B0%86%20Lua%20%E4%B8%8E%20C%20%E9%9B%86%E6%88%90%EF%BC%9A%E7%AC%AC%202%20%E9%83%A8%E5%88%86/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="将 Lua 与 C 集成：第 2 部分Lua C API 为主机程序提供了一组丰富且非常精心设计的函数，用于与 Lua 脚本进行交互。使用 Lua C API，不仅可以创建或关闭 Lua 状态、打开标准 Lua 库并从文件执行 Lua 代码，还可以创建更多。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/static/img/fff255820be99c65c20448c03bf37b08.image.webp">
+<meta property="og:image" content="http://example.com/static/img/366808268eb70969e9c77826a2249d7f.image.webp">
+<meta property="og:image" content="http://example.com/static/img/3d7d74606c8a090dbe77cee64572eadf.image.webp">
+<meta property="article:published_time" content="2024-12-08T14:06:07.025Z">
+<meta property="article:modified_time" content="2024-12-04T03:28:08.489Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="blog">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/static/img/fff255820be99c65c20448c03bf37b08.image.webp">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/atom.xml" title="RSS Feed"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="Search"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-将 Lua 与 C 集成：第 2 部分" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2024/12/08/%E5%B0%86%20Lua%20%E4%B8%8E%20C%20%E9%9B%86%E6%88%90%EF%BC%9A%E7%AC%AC%202%20%E9%83%A8%E5%88%86/" class="article-date">
+  <time class="dt-published" datetime="2024-12-08T14:06:07.025Z" itemprop="datePublished">2024-12-08</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/lua-C/">lua && C++</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      将 Lua 与 C 集成：第 2 部分
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="将-Lua-与-C-集成：第-2-部分"><a href="#将-Lua-与-C-集成：第-2-部分" class="headerlink" title="将 Lua 与 C 集成：第 2 部分"></a>将 Lua 与 C 集成：第 2 部分</h1><p>Lua C API 为主机程序提供了一组丰富且非常精心设计的函数，用于与 Lua 脚本进行交互。<br>使用 Lua C API，不仅可以创建或关闭 Lua 状态、打开标准 Lua 库并从文件执行 Lua 代码，还可以创建更多。  </p>
+<span id="more"></span>
+
+<p>使用 Lua C API，我们可以：  </p>
+<ul>
+<li>管理 Lua 状态，创建和关闭它们。</li>
+<li>将库加载到 Lua 状态。</li>
+<li>在 Lua 状态下创建变量。</li>
+<li>访问处于 Lua 状态的变量。</li>
+<li>从 C 运行 Lua 代码。</li>
+<li>通过向 Lua 状态提供 C 函数，从 Lua 运行 C。</li>
+<li>创建用户值，即保存 C 数据结构的值。</li>
+</ul>
+<h1 id="虚拟-Lua-堆栈"><a href="#虚拟-Lua-堆栈" class="headerlink" title="虚拟 Lua 堆栈"></a>虚拟 Lua 堆栈</h1><p>Lua 使用虚拟堆栈在 C 和 Lua 之间传递值。这意味着 C 函数必须从堆栈中弹出其参数，并将值推送到堆栈并返回值，返回一个 int 指示返回值的数量。堆栈上的每个元素都有一个数字索引，从 1 开始。</p>
+<h1 id="在-Lua-和-C-之间传递值"><a href="#在-Lua-和-C-之间传递值" class="headerlink" title="在 Lua 和 C 之间传递值"></a>在 Lua 和 C 之间传递值</h1><p>参数和返回值使用虚拟堆栈在 Lua 和 C 之间传递。这意味着 C 函数必须从堆栈中弹出其参数，并将值推送到堆栈并返回值，返回一个 int 来指示返回值的数量。堆栈上的每个元素都有一个数字索引，从 1 开始。请考虑以下 Lua 调用：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">local</span> n = myFunction(<span class="string">&#x27;miller&#x27;</span>, <span class="number">42</span>, <span class="string">&#x27;south&#x27;</span>, <span class="string">&#x27;north&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p>然后，堆栈将如下所示：</p>
+<p><img src="/static/img/fff255820be99c65c20448c03bf37b08.image.webp" alt="image.png"></p>
+<p>为了将值返回给 Lua，C 函数将值按返回顺序推送到堆栈。考虑以下堆栈，并假设函数返回整数 3，指示三个结果值：</p>
+<p><img src="/static/img/366808268eb70969e9c77826a2249d7f.image.webp" alt="image.png"><br>调用 Lua 函数将接收此值作为三个返回值：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">local</span> dir1, dir2, media = myFunction()  <span class="comment">-- &#x27;west&#x27;, &#x27;east&#x27;, 42</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>所以 dir1 包含 ‘west， dir2 ‘east， 并且，media，整数 42。</p>
+<p>Lua C API 提供了一组丰富的函数来查询和操作堆栈。Lua 辅助库提供了额外的函数，这些函数不是从堆栈中检索值，而是在 go 中检查预期的类型。</p>
+<p>用于从堆栈中检索值的函数被命名，而辅助库中的函数被命名为 <code>lua_totypeluaL_checktype</code></p>
+<p>为了将值推送到堆栈，Lua C API 提供了 named 函数<code>lua_pushtype</code></p>
+<h1 id="从-C-调用-Lua-代码"><a href="#从-C-调用-Lua-代码" class="headerlink" title="从 C 调用 Lua 代码"></a>从 C 调用 Lua 代码</h1><p>Lua 基本上提供了两个函数来从 C 调用 Lua 代码，以及 .它们在处理错误情况的方式上有所不同。<code>lua_call()</code></p>
+<p><code>lua_call()</code>用于在未受保护的模式下调用 Lua 函数，这意味着在发生错误的情况下，主机程序将简单地通过调用 终止，例如调用该函数的 Lua 代码。<code>exit()error()</code></p>
+<p><code>lua_pcall()</code>另一方面，在保护模式下调用 Lua 函数，这意味着它不会在发生错误时终止调用程序。相反，它将通过其返回值发出信号，表明存在问题，并且 Lua 错误消息将在虚拟堆栈的第一个元素中方便地提供给主机程序。因此，我们可以调用以检索 Lua 错误消息。<code>lua_tostring(L, 1)</code></p>
+<p>使用通常是调用 Lua 代码的首选方式。<code>lua_pcall()</code></p>
+<p>为了调用 Lua 函数，再次使用 Lua 虚拟堆栈来传递参数和检索返回值。为了调用 Lua 函数，我们首先将要调用的函数推送到堆栈上，然后将要传递给函数的参数推送到堆栈上。设置堆栈后，我们调用 或 ，传递要推送到堆栈上的参数数和我们期望的返回值数：<code>lua_pcall()lua_call()</code></p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">lua_call(lua_State *L, int nargs, int nresults);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>例如，我们想用三个参数来调用函数，“miller”、“north”和数字 42。以下 C 代码将准备我们的堆栈：print()</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">lua_getglobal(L, <span class="string">&quot;print&quot;</span>); [<span class="number">1</span>]</span><br><span class="line">lua_pushstring(L, <span class="string">&quot;miller&quot;</span>);</span><br><span class="line">lua_pushstring(L, <span class="string">&quot;north&quot;</span>);</span><br><span class="line">lua_pushinteger(L, <span class="number">42</span>);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>[1] 将作为参数传递的全局值推送到堆栈上，在本例中为 print（） 函数（请记住，在 Lua 中函数只是普通值，因此它们可以放在堆栈上）。lua_getglobal()</li>
+</ul>
+<p>我们的堆栈现在如下所示：</p>
+<p><img src="/static/img/3d7d74606c8a090dbe77cee64572eadf.image.webp" alt="image.png"></p>
+<p>我们现在可以调用该函数，不期望任何结果值：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lua_call(L, <span class="number">3</span>, <span class="number">0</span>);</span><br></pre></td></tr></table></figure>
+<h1 id="从-Lua-调用-C-代码"><a href="#从-Lua-调用-C-代码" class="headerlink" title="从 Lua 调用 C 代码"></a>从 Lua 调用 C 代码</h1><p>为了使 Lua 能够调用 C 代码，必须向 Lua 提供 C 代码。在最简单的形式中，宿主程序将创建一个全局变量来保存要调用的 C 函数。</p>
+<p>任何将从 Lua 调用的 C 函数都必须遵循以下协议：</p>
+<ul>
+<li>它收到一个 lua_State * 作为其唯一参数</li>
+<li>它从 Lua 堆栈中提取参数（如果有）。</li>
+<li>它做任何它的目的是什么。</li>
+<li>它将任何返回值推送到 Lua 堆栈。</li>
+<li>它以 int 的形式返回返回值的数目。<br>将从 Lua 调用的 C 函数的签名如下所示：</li>
+</ul>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">int</span><br><span class="line">myFunction(lua_State *L)</span><br><span class="line">&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>一旦我们编写了这样的函数，就必须让 Lua 状态知道它。一种简单的方法是为函数定义全局名称。</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">        lua_pushcfunction(L, myFunction);</span><br><span class="line">        lua_setglobal(L, <span class="string">&quot;myFunction&quot;</span>);</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>在 Lua 中，该函数现在可以称为 。<code>myFunction()</code></p>
+<p>一个简单而完整的例子<br>在这个简单的例子中，我们将向 Lua 提供一个函数，它需要一个字符串参数，即要问候的人的名字，并将调用次数返回给 Lua。该函数将向控制台输出问候消息。greetings()</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">/* The <span class="function"><span class="keyword">function</span> <span class="title">that</span> <span class="title">will</span> <span class="title">be</span> <span class="title">called</span> <span class="title">from</span> <span class="title">Lua</span> */</span></span><br><span class="line"><span class="function"><span class="title">static</span> <span class="title">int</span></span></span><br><span class="line"><span class="function"><span class="title">greetings</span><span class="params">(lua_State *L)</span></span></span><br><span class="line">&#123;</span><br><span class="line">        const <span class="built_in">char</span> *name;</span><br><span class="line">        static int invocations = <span class="number">1</span>;</span><br><span class="line">        name = luaL_checkstring(L, <span class="number">1</span>); [<span class="number">1</span>]</span><br><span class="line">        printf(<span class="string">&quot;greetings, %s\n&quot;</span>, name);</span><br><span class="line">        lua_pushinteger(L, invocations++);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line">...</span><br><span class="line">/* Register the <span class="function"><span class="keyword">function</span> */</span></span><br><span class="line"><span class="function"><span class="title">lua_pushcfunction</span><span class="params">(L, greetings)</span></span>;</span><br><span class="line">lua_setglobal(L, <span class="string">&quot;greetings&quot;</span>);</span><br></pre></td></tr></table></figure>
+<p>[1] 我们在这里使用辅助函数，它将确保堆栈元素 1 实际上是一个字符串。否则，它将引发错误。luaL_checkstring()</p>
+<p>设置完成后，Lua 可以按通常的方式调用该函数：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">local</span> invocations = greetings <span class="string">&#x27;miller&#x27;</span> [<span class="number">1</span>]</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;the greetings functions has been called &#x27;</span> .. invocations .. <span class="string">&#x27; times.&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p>[1] 如果 Lua 函数的唯一参数是字符串，则不需要括号。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2024/12/08/%E5%B0%86%20Lua%20%E4%B8%8E%20C%20%E9%9B%86%E6%88%90%EF%BC%9A%E7%AC%AC%202%20%E9%83%A8%E5%88%86/" data-id="cm4fofqxc000am0twebfb00mc" data-title="将 Lua 与 C 集成：第 2 部分" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/blog/" rel="tag">blog</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2024/12/08/%E5%B0%86%20Lua%20%E4%B8%8E%20C%20%E9%9B%86%E6%88%90%EF%BC%9A%E7%AC%AC%205%20%E9%83%A8%E5%88%86/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          将 Lua 与 C 集成：第 5 部分
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2024/12/08/%E5%B0%86%20Lua%20%E4%B8%8E%20C%20%E9%9B%86%E6%88%90%EF%BC%9A%E7%AC%AC%204%20%E9%83%A8%E5%88%86/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">将 Lua 与 C 集成：第 4 部分</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/CNN/">CNN</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lua-C/">lua && C++</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%93%9D%E5%9B%BE/">蓝图</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/" rel="tag">blog</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/blog/" style="font-size: 10px;">blog</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/12/">December 2024</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2024/12/08/%E5%B0%86%20Lua%20%E4%B8%8E%20C%20%E9%9B%86%E6%88%90%EF%BC%9A%E7%AC%AC%206%20%E9%83%A8%E5%88%86/">将 Lua 与 C 集成：第 6 部分</a>
+          </li>
+        
+          <li>
+            <a href="/2024/12/08/%E5%B0%86%20Lua%20%E4%B8%8E%20C%20%E9%9B%86%E6%88%90%EF%BC%9A%E7%AC%AC%201%20%E9%83%A8%E5%88%86/">将 Lua 与 C 集成：第 1 部分</a>
+          </li>
+        
+          <li>
+            <a href="/2024/12/08/%E5%B0%86%20Lua%20%E4%B8%8E%20C%20%E9%9B%86%E6%88%90%EF%BC%9A%E7%AC%AC%203%20%E9%83%A8%E5%88%86/">将 Lua 与 C 集成：第 3 部分</a>
+          </li>
+        
+          <li>
+            <a href="/2024/12/08/%E5%B0%86%20Lua%20%E4%B8%8E%20C%20%E9%9B%86%E6%88%90%EF%BC%9A%E7%AC%AC%205%20%E9%83%A8%E5%88%86/">将 Lua 与 C 集成：第 5 部分</a>
+          </li>
+        
+          <li>
+            <a href="/2024/12/08/%E5%B0%86%20Lua%20%E4%B8%8E%20C%20%E9%9B%86%E6%88%90%EF%BC%9A%E7%AC%AC%202%20%E9%83%A8%E5%88%86/">将 Lua 与 C 集成：第 2 部分</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2024 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
